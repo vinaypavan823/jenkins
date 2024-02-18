@@ -26,6 +26,8 @@ public class B2StorageConfig {
 				.createDefaultFactory()
 				.create(APP_KEY_ID, APP_KEY, userAgent);
 	}
+	
+	
 
 	@Bean
 	public RestTemplate restTemplate() {

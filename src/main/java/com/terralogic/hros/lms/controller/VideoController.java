@@ -3,6 +3,8 @@ package com.terralogic.hros.lms.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,6 +21,7 @@ import com.backblaze.b2.client.exceptions.B2Exception;
 import com.terralogic.hros.lms.entity.RequestContent;
 import com.terralogic.hros.lms.exceptionHandling.NoResourceFound;
 import com.terralogic.hros.lms.exceptionHandling.TranscodingException;
+import com.terralogic.hros.lms.repository.RequestContentRepo;
 import com.terralogic.hros.lms.service.VideoTranscodingService;
 import com.terralogic.hros.lms.service.VideoTranscodingService2;
 import com.terralogic.hros.lms.utility.BackBlazeService;
@@ -27,8 +30,17 @@ import com.terralogic.hros.lms.utility.BackBlazeService;
 @RequestMapping("/api")
 
 public class VideoController {
-	
+	@Autowired
 	Environment environment;
+	@Autowired
+	RequestContentRepo r1;
+	
+	@Value("${b2.userAgent}")
+	private String c;
+	@Value("${secret1}")
+	private String c1;
+	@Value("${spring.data}")
+	private String c2;
 
 	@Autowired
 	private VideoTranscodingService videoTranscodingService;
@@ -134,9 +146,40 @@ public class VideoController {
 	}
 	
 	@GetMapping("/cluster-info")
-	public String getName() {
+	public List<String> getName() {
 		String v = environment.getProperty("b2.userAgent");
-		return v;
+		String secret1Value = environment.getProperty("SECRET1");
+		String secret2Value = environment.getProperty("SECRETV");
+		String secret3Value = environment.getProperty("MONGO_URI");
+		String s = environment.getProperty("MONGO-V");
+		String s1 = environment.getProperty("SPRING_DATA");
+		List<String> v1= new ArrayList<>();
+		v1.add(secret1Value);
+		v1.add(secret2Value);
+		v1.add(secret3Value);
+		v1.add(s);
+		v1.add(s1);
+		v1.add(v);
+
+		return v1;
+	}
+	@GetMapping("/prop")
+	public List<String> prop() {
+		List<String> v1= new ArrayList<>();
+		v1.add(c);
+		v1.add(c1);
+		v1.add(c2);
+		return v1;
+	}
+	@PostMapping("/postdata")
+	public RequestContent addC() {
+		RequestContent r = new RequestContent();
+		r.setAccessType(c);
+		r.setCategory(c1);
+		r.setCoverImage("kndsnsj");
+		r1.save(r);
+		return r;
+		
 	}
 
 
